@@ -1,13 +1,37 @@
-function getcategories(){
+function getCategories(){
     fetch('http://localhost/scraper/categories_scraper.php')
     .then((response) => response.json())
     .then((data) => {
-        createElement('h1', 'Categorie:');
+        let container = createElement('div');
+        let div = createElement('div');
+        let btn = document.createElement('button');
+        let caret = document.createElement('span');
+        let list = document.createElement('ul');
+        let text = document.createElement('p');
+        text.innerHTML = 'Categorie';
+        text.style.fontSize = 32;
+
+        container.className = 'centred';
+        div.className = 'dropdown';
+        btn.className = 'btn btn-primary dropdown-toggle selector';
+        btn.setAttribute('type', 'button');
+        btn.setAttribute('data-toggle', 'dropdown');
+        caret.className = 'caret';
+        list.className = 'dropdown-menu';
+        
+        container.appendChild(div);
+        div.appendChild(btn);
+        btn.appendChild(text);
+        btn.appendChild(caret);
+        div.appendChild(list);
 
         for (const key in data) {
-            createElement('button', data[key]['category'], data[key]['link']);
-            createElement('br');
-            createElement('br');
+            var li = createElement('li', 0, 0, false);
+            list.appendChild(li);
+            let voice = document.createElement('a');
+            voice.setAttribute('onclick', 'getProducts("' + data[key]['link'] +'")');
+            voice.innerHTML = data[key]['category'];
+            li.appendChild(voice);
         }
     })
 }
@@ -17,17 +41,24 @@ function getProducts(link){
         .then((response) => response.json())
         .then((data) => {
             document.body.innerHTML = '';
+            createElement('br');
 
             for (const element in data) {
-                createElement('img', data[element]['img']);
-                createElement('h3', data[element]['product']);
-                createElement('h4', data[element]['price'] + '€');
-                createElement('h4', data[element]['stars'] + ' stelle');
-                createElement('a', 'Compra', data[element]['link']);
+                let container = createElement('div');
+                container.className = 'align-content';
+                container.appendChild(createElement('img', data[element]['img'], 0, false));
+                let dataContainer = createElement('div', 0, 0, false);
+                container.appendChild(dataContainer);
+                dataContainer.appendChild(createElement('h3', data[element]['product'], 0, false));
+                let price = createElement('h4', data[element]['price'] + '€', 0, false);
+                price.className = 'price';
+                dataContainer.appendChild(price);
+                let str = createElement('h4', data[element]['stars'] + '\t', 0, false);
+                str.appendChild(createElement('img', 'star-icon.png', 0, false));
+                dataContainer.appendChild(str);
+                dataContainer.appendChild(createElement('a', 'Compra', data[element]['link'], false));
                 createElement('br');
-                createElement('br');
-                document.body.appendChild(document.createElement('hr'));
-                createElement('br');
+                createElement('hr');
                 createElement('br');
             }
         });
@@ -38,13 +69,13 @@ function createElement(type, data, link, append = true){
 
     if(type == 'img')
         el.src = data;
-    else if(type.substring(0,1) == 'h')
+    else if(type.substring(0,1) == 'h' && Number.isInteger(parseInt(type.substring(1,2))))
         el.innerHTML = data;
     else if(type == 'a'){
         el.innerHTML = data;
         link.replace('\/', '/');
         el.href = 'https://www.amazon.it' + link;
-    }else if(type = 'button'){
+    }else if(type == 'button'){
         el.innerHTML = data;
         el.setAttribute('onclick', 'getProducts("' + link +'")')
     }
@@ -55,7 +86,7 @@ function createElement(type, data, link, append = true){
     return el;
 }
 
-getcategories();
+getCategories();
 
 /*
 img : "https://m.media-amazon.com/images/I/51aphEGSOzL._AC_UL320_.jpg"

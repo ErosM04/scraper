@@ -1,0 +1,21 @@
+.centred{
+    margin-inline: 45%;
+    margin-top: 10%;
+}
+
+.selector{
+    background-color: #febd69 !important;
+    border-color: #131921 !important;
+}
+
+.align-content{
+    display: flex;
+}
+
+.price{
+    color: #B12704;
+}
+
+img{
+    margin-inline: 2%;
+}
