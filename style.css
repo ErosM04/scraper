@@ -19,3 +19,9 @@
 img{
     margin-inline: 2%;
 }
+
+.cat-div{
+    background-color: #febd69;
+    padding: 5px;
+    border-bottom: solid #131921 1px;
+}
